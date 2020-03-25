@@ -3,6 +3,7 @@
 namespace CodeGreenCreative\SamlIdp\Jobs;
 
 use CodeGreenCreative\SamlIdp\Traits\PerformsSingleSignOn;
+use CodeGreenCreative\SamlIdp\Traits\SamlParameters;
 use Illuminate\Foundation\Bus\Dispatchable;
 use LightSaml\Helper;
 use LightSaml\Model\Assertion\Issuer;
@@ -19,7 +20,7 @@ use Illuminate\Support\Str;
 
 class SamlSlo
 {
-    use Dispatchable, PerformsSingleSignOn;
+    use Dispatchable, PerformsSingleSignOn, SamlParameters;
 
     private $sp;
 
@@ -42,14 +43,14 @@ class SamlSlo
     {
         $this->setDestination();
         // We are receiving a Logout Request
-        if (request()->filled('SAMLRequest')) {
-            $xml = gzinflate(base64_decode(request('SAMLRequest')));
+        if ($this->hasSamlRequest()) {
+            $xml = $this->getSamlRequest();
             $deserializationContext = new DeserializationContext;
             $deserializationContext->getDocument()->loadXML($xml);
             // Get the final destination
-            session()->put('RelayState', request('RelayState'));
-        } elseif (request()->filled('SAMLResponse')) {
-            $xml = gzinflate(base64_decode(request('SAMLResponse')));
+            session()->put('RelayState', $this->getSamlRelayState());
+        } elseif ($this->hasSamlResponse()) {
+            $xml = $this->getSamlResponse();
             $deserializationContext = new DeserializationContext;
             $deserializationContext->getDocument()->loadXML($xml);
         }
