@@ -11,6 +11,7 @@ namespace CodeGreenCreative\SamlIdp;
 use CodeGreenCreative\SamlIdp\Console\CreateCertificate;
 use CodeGreenCreative\SamlIdp\Console\CreateServiceProvider;
 use CodeGreenCreative\SamlIdp\Traits\EventMap;
+use CodeGreenCreative\SamlIdp\Traits\SamlParameters;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
@@ -19,7 +20,7 @@ use Illuminate\Support\ServiceProvider;
 
 class LaravelSamlIdpServiceProvider extends ServiceProvider
 {
-    use EventMap;
+    use EventMap, SamlParameters;
 
     /**
      * Bootstrap the application events.
@@ -88,7 +89,7 @@ class LaravelSamlIdpServiceProvider extends ServiceProvider
     public function registerBladeComponents()
     {
         Blade::directive('samlidp', function ($expression) {
-            if (request()->filled('SAMLRequest')) {
+            if ($samlRequest = $this->hasSamlRequest() && !is_null($samlRequest)) {
                 return "<?php echo view('samlidp::components.input'); ?>";
             }
         });
