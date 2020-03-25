@@ -3,10 +3,13 @@
 namespace CodeGreenCreative\SamlIdp\Listeners;
 
 use CodeGreenCreative\SamlIdp\Jobs\SamlSso;
+use CodeGreenCreative\SamlIdp\Traits\SamlParameters;
 use Illuminate\Auth\Events\Authenticated;
 
 class SamlAuthenticated
 {
+    use SamlParameters;
+
     /**
      * Listen for the Authenticated event
      *
@@ -15,7 +18,7 @@ class SamlAuthenticated
      */
     public function handle(Authenticated $event)
     {
-        if (request()->filled('SAMLRequest') && ! request()->is('saml/logout') && request()->isMethod('get')) {
+        if ($this->hasSamlRequest() && !request()->is('saml/logout') && request()->isMethod('get')) {
             abort(response(SamlSso::dispatchNow()), 302);
         }
     }
