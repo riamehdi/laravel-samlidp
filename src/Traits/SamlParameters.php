@@ -11,7 +11,8 @@ trait SamlParameters
      */
     public function getSamlRequest()
     {
-        return gzinflate(base64_decode(request('SAMLRequest')));
+        return gzinflate(base64_decode(session()->get('protocol.parameters.SAMLRequest')));
+        // return gzinflate(base64_decode(request('SAMLRequest')));
     }
  
      /**
@@ -21,7 +22,8 @@ trait SamlParameters
      */
     public function hasSamlRequest()
     {
-        return request()->filled('SAMLRequest');
+        return session()->has('protocol.parameters.SAMLRequest');
+        // return request()->filled('SAMLRequest');
     }
 
     /**
@@ -31,7 +33,8 @@ trait SamlParameters
      */
     public function getSamlResponse()
     {
-        return gzinflate(base64_decode(request('SAMLResponse')));
+        return gzinflate(base64_decode(session()->get('protocol.parameters.SAMLResponse')));
+        // return gzinflate(base64_decode(request('SAMLResponse')));
     }
  
      /**
@@ -41,7 +44,8 @@ trait SamlParameters
      */
     public function hasSamlResponse()
     {
-        return request()->filled('SAMLResponse');
+        return session()->has('protocol.parameters.SAMLResponse');
+        // return request()->filled('SAMLResponse');
     }
 
     /**
@@ -51,6 +55,7 @@ trait SamlParameters
      */
     public function getSamlRelayState()
     {
-        return request('RelayState');
+        return session()->get('protocol.parameters.RelayState');
+        // return request('RelayState');
     }
 }
