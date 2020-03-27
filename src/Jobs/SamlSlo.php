@@ -43,14 +43,10 @@ class SamlSlo
     {
         $this->setDestination();
         // We are receiving a Logout Request
-        if ($this->hasSamlRequest()) {
-            $xml = $this->getSamlRequest();
+        if ($this->hasSamlRequest() && !empty($xml = $this->getSamlRequest())) {
             $deserializationContext = new DeserializationContext;
             $deserializationContext->getDocument()->loadXML($xml);
-            // Get the final destination
-            session()->put('RelayState', $this->getSamlRelayState());
-        } elseif ($this->hasSamlResponse()) {
-            $xml = $this->getSamlResponse();
+        } elseif ($this->hasSamlResponse() && !empty($xml = $this->getSamlResponse())) {
             $deserializationContext = new DeserializationContext;
             $deserializationContext->getDocument()->loadXML($xml);
         }
