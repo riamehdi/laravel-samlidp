@@ -17,8 +17,7 @@ class LogoutController extends Controller
     {
         $slo_redirect = $request->session()->get('saml.slo_redirect');
         if (!$slo_redirect) {
-            $this->setSloRedirect($request);
-            $slo_redirect = $request->session()->get('saml.slo_redirect');
+            $slo_redirect = $this->setSloRedirect($request);
         }
 
         // Need to broadcast to our other SAML apps to log out!
@@ -57,5 +56,6 @@ class LogoutController extends Controller
         }
 
         $request->session()->put('saml.slo_redirect', $slo_redirect);
+        return $slo_redirect;
     }
 }
