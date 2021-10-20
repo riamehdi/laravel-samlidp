@@ -4,7 +4,7 @@
     "keywords": ["laravel", "saml", "saml 2.0", "auth", "acl", "sso", "idp"],
     "license": "MIT",
     "require": {
-        "php": "^8.0",
+        "php": "7.4.* || ^8.0",
         "illuminate/support": "^8.0",
         "illuminate/routing": "^8.0",
         "lightsaml/lightsaml": "^2.0"
